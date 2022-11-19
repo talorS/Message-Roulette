@@ -22,11 +22,11 @@ app.use("/api", router);
 
 // create server and listen for requests
 const server = createServer(app);
-server.listen(PORT, () => {
-  console.log(`===== Server is running on port ${PORT} =====`);
-});
 setupSocket(server)
   .then((socket) => {
     app.set("io", socket);
+    server.listen(PORT, () => {
+      console.log(`===== Server is running on port ${PORT} =====`);
+    });
   })
   .catch((err) => console.error(err.message));
