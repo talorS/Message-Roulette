@@ -2,13 +2,12 @@ import { Server } from "socket.io";
 import { createClient } from "redis";
 import { createAdapter } from "@socket.io/redis-adapter";
 import { authSocket } from "../middleware/authentication";
-
-const { HOST: host, PUB_PORT: port, CLIENT_URL: origin } = process.env;
+import { env } from "process";
 
 export const setupSocket = async (server) => {
   const io = new Server(server, {
     cors: {
-      origin,
+      origin: env.CLIENT_URL,
       methods: ["GET", "POST"],
     },
   });
@@ -18,7 +17,7 @@ export const setupSocket = async (server) => {
     authSocket(socket, next);
   });
 
-  const pubClient = createClient({ host, port });
+  const pubClient = createClient({ host: env.HOST, port: env.PUB_PORT });
   const subClient = pubClient.duplicate();
   pubClient.on("ready", () => {
     console.log("Publisher connected to redis and ready to use");
