@@ -7,11 +7,6 @@ import { env } from "process";
 export const setupSocket = async (server) => {
   const io = new Server();
 
-  //midlleware;
-  io.use((socket, next) => {
-    authSocket(socket, next);
-  });
-
   const pubClient = createClient({ url: env.URL });
   const subClient = pubClient.duplicate();
   pubClient.on("ready", () => {
@@ -26,6 +21,12 @@ export const setupSocket = async (server) => {
   await Promise.all([pubClient.connect(), subClient.connect()]);
   io.adapter(createAdapter(pubClient, subClient));
   io.listen(server);
+
+  //midlleware;
+  io.use((socket, next) => {
+    authSocket(socket, next);
+  });
+
   //event listener
   io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
