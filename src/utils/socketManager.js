@@ -5,6 +5,17 @@ import { authSocket } from "../middleware/authentication";
 import { env } from "process";
 
 export const setupSocket = async (server) => {
+  const io = new Server(server, {
+    cors: {
+      origin: env.CLIENT_URL,
+      credentials: true,
+      methods: ["GET", "POST"],
+    },
+  });
+  //midlleware;
+  io.use((socket, next) => {
+    authSocket(socket, next);
+  });
   const pubClient = createClient({ url: env.URL });
   const subClient = pubClient.duplicate();
   pubClient.on("ready", () => {
@@ -17,28 +28,6 @@ export const setupSocket = async (server) => {
   subClient.on("error", (err) => console.log("Subscriber Client Error", err));
 
   await Promise.all([pubClient.connect(), subClient.connect()]);
-  const io = new Server(server, {
-    adapter: createAdapter(pubClient, subClient),
-    cors: {
-      origin: env.CLIENT_URL,
-      credentials: true,
-      methods: ["GET", "POST"],
-    },
-    transports: ["websocket", "polling", "flashsocket"],
-  });
-
-  //midlleware;
-  io.use((socket, next) => {
-    authSocket(socket, next);
-  });
-
-  //event listener
-  io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
-    socket.on("disconnect", () => {
-      console.log(`User disconnected: ${socket.id}`);
-    });
-  });
-
+  io.adapter(createAdapter(pubClient, subClient));
   return io;
 };
