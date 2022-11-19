@@ -1,9 +1,16 @@
 import express from "express";
 import { authGaurd } from "../middleware/authentication";
-import { validateGaurd } from "../middleware/validator";
+import { validateGaurd, validateUser } from "../middleware/validator";
 import { handleSpin, handleWild, handleBlast } from "../models/messeageBL";
+import { getToken } from "../models/usersBL";
 
 const router = express.Router();
+
+router.get("/generateToken", validateUser, (req, res, next) => {
+  const { username } = req.body;
+  const resp = getToken(username);
+  res.status(resp.status).send(resp.messeage);
+});
 
 router.post("/spin", authGaurd, async (req, res, next) => {
   const io = req.app.get("io");

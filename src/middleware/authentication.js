@@ -1,13 +1,14 @@
 import jwt from "jsonwebtoken";
-const { ACCESS_TOKEN_SECRET: secretKey } = process.env;
+import { env } from "process";
 
 export const authGaurd = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (token) {
-    jwt.verify(token, secretKey, (err) => {
+    jwt.verify(token, env.ACCESS_TOKEN_SECRET, (err, payload) => {
       if (err) {
         return res.sendStatus(403);
       }
+      req.user = payload.username;
       next();
     });
   } else {
@@ -18,11 +19,11 @@ export const authGaurd = (req, res, next) => {
 export const authSocket = (socket, next) => {
   const { token } = socket.handshake.auth; // receive the token from client
   if (token) {
-    jwt.verify(token, secretKey, (err, payload) => {
+    jwt.verify(token, env.ACCESS_TOKEN_SECRET, (err, payload) => {
       if (err) {
         return next(new Error("Authentication error!"));
       }
-      socket.decode = payload.data;
+      socket.user = payload.username;
       next();
     });
   } else {
