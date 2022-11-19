@@ -8,7 +8,7 @@ import { setupSocket } from "./src/utils/socketManager";
 
 //config
 dotenv.config();
-const { PORT } = process.env || 3000;
+const { PORT } = process.env || 8080;
 const app = express();
 
 //middleware
