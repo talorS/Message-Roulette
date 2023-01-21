@@ -5,6 +5,8 @@ import morgan from "morgan";
 import router from "./src/routes/router";
 import { createServer } from "http";
 import { setupSocket } from "./src/utils/socketManager";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger.json";
 
 //config
 dotenv.config();
@@ -19,6 +21,13 @@ app.use(cors());
 
 // setup route path
 app.use("/api", router);
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    explorer: true,
+  })
+);
 
 // create server and listen for requests
 const server = createServer(app);

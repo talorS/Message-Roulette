@@ -1,0 +1,112 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Message Roulette",
+    "description": "Simple service which sends a message to random online users by a specific API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "JWT": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/generateToken": {
+      "post": {
+        "tags": ["Token"],
+        "summary": "Creates a auth token",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User that we want to create token for",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/spin": {
+      "post": {
+        "security": [{ "JWT": [] }],
+        "tags": ["Roulette"],
+        "summary": "send a message to a random connected users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Users not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/wild": {
+      "post": {
+        "security": [{ "JWT": [] }],
+        "tags": ["Roulette"],
+        "summary": "send a message to X random connected users",
+        "parameters": [
+          {
+            "name": "x",
+            "in": "query",
+            "description": "the number of users to send a message to",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": ["userName"],
+      "properties": {
+        "userName": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

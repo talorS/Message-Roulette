@@ -20,19 +20,19 @@ export const validateGaurd = [
     .notEmpty()
     .withMessage("X param should not be empty!")
     .bail()
-    .isInt({ min: 0 })
+    .isInt({ min: 1 })
     .withMessage("X param should be a positive number!")
     .bail(),
   reporter,
 ];
 
 export const validateUser = [
-  check("username")
+  check("userName")
     .exists()
-    .withMessage("generateToken endPoint requires username in body params!")
+    .withMessage("generateToken endPoint requires userName in body params!")
     .bail()
     .notEmpty()
-    .withMessage("username param should not be empty!")
+    .withMessage("userName param should not be empty!")
     .bail(),
   reporter,
 ];

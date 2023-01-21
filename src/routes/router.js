@@ -6,9 +6,9 @@ import { getToken } from "../models/usersBL";
 
 const router = express.Router();
 
-router.get("/generateToken", validateUser, (req, res, next) => {
-  const { username } = req.body;
-  const resp = getToken(username);
+router.post("/generateToken", validateUser, (req, res, next) => {
+  const { userName } = req.body;
+  const resp = getToken(userName);
   res.status(resp.status).send(resp.messeage);
 });
 

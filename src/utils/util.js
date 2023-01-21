@@ -14,5 +14,5 @@ export const getRandomUsers = (arr, num) => {
     res.push(arr[random]);
     i++;
   }
-  return res; // a Array containing a random connected socket ids
+  return res; // an Array containing a random connected socket id
 };
