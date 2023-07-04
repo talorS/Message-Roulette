@@ -1,7 +1,10 @@
+
+import { IAuthRequest, ISocket } from "@types";
+import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "process";
 
-export const authGaurd = (req, res, next) => {
+export const authGuard = (req: IAuthRequest, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (token) {
     jwt.verify(token, env.ACCESS_TOKEN_SECRET, (err, payload) => {
@@ -16,7 +19,7 @@ export const authGaurd = (req, res, next) => {
   }
 };
 
-export const authSocket = (socket, next) => {
+export const authSocket = (socket: ISocket, next: NextFunction) => {
   const { token } = socket.handshake.auth; // receive the token from client
   if (token) {
     jwt.verify(token, env.ACCESS_TOKEN_SECRET, (err, payload) => {

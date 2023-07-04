@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "esModuleInterop": true,
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es6",
+    "jsx": "react",
+    "lib": [
+      "dom",
+      "esnext",
+      "es5",
+      "es6",
+      "dom.iterable"
+    ],
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": [
+      "node",
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "@middleware/*": [
+        "middleware/*"
+      ],
+      "@models/*": [
+        "models/*"
+      ],
+      "@routes/*": [
+        "routes/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@types": [
+        "types"
+      ]
+    }
+  },
+  "include": [
+    "src/*",
+    "dist/*"
+  ],
+  "files": [
+    "./server.ts"
+  ],
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  },
+}

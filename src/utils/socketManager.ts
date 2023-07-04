@@ -1,8 +1,10 @@
 import { Server } from "socket.io";
 import { createClient } from "redis";
 import { createAdapter } from "@socket.io/redis-adapter";
-import { authSocket } from "../middleware/authentication";
+import { authSocket } from "@middleware/authentication";
 import { env } from "process";
+import { NextFunction } from "express";
+import { ISocket } from "@types";
 
 export const setupSocket = async (server) => {
   const io = new Server(server, {
@@ -12,8 +14,8 @@ export const setupSocket = async (server) => {
       methods: ["GET", "POST"],
     },
   });
-  //midlleware;
-  io.use((socket, next) => {
+  //middleware;
+  io.use((socket: ISocket, next: NextFunction) => {
     authSocket(socket, next);
   });
   const pubClient = createClient({ url: env.URL });

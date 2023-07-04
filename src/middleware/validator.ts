@@ -1,7 +1,7 @@
-import validator from "express-validator";
-const { check, validationResult } = validator;
+import { NextFunction, Request, Response } from "express";
+import { check, validationResult } from "express-validator";
 
-const reporter = (req, res, next) => {
+const reporter = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessages = errors.array().map((error) => error.msg);
@@ -12,7 +12,7 @@ const reporter = (req, res, next) => {
   next();
 };
 
-export const validateGaurd = [
+export const validateGuard = [
   check("x")
     .exists()
     .withMessage("wild endPoint requires X in query params!")
